@@ -8,6 +8,8 @@ export const UserMovieList = () => {
     const userMovieListService = new UserMovieListService();
     const [movieList, setMovieList] = useState();
     const [selectedMovie, setSelectedMovie] = useState();
+    const [showModal, setShowModal] = useState(false);
+    const [deletedMovie, setDeletedMovie] = useState();
 
     useEffect(() => {
         setUserMovieList();
@@ -20,6 +22,33 @@ export const UserMovieList = () => {
     }
 
     const onClose = () => setSelectedMovie(null);
+
+    const onCloseDelete = () => {setShowModal(false); setSelectedMovie(null);}
+
+    const setDeleteModal = (id) => {
+        setDeletedMovie(id);
+        setShowModal(true);
+    }
+
+    const confirmDeleteModal = (id) => {
+        return(
+        <Modal show={!!deletedMovie} onHide={onCloseDelete}>
+            <Modal.Body>
+                Are you sure you would like to remove this movie from the list?
+            </Modal.Body>
+            <Modal.Footer>
+                <Button variant='danger' onClick={() => deleteMovieFromList(id)}>Yes</Button>
+                {' '}<Button variant='light' onClick={onCloseDelete}>No</Button>
+            </Modal.Footer>
+        </Modal>
+        )
+    }
+
+    const deleteMovieFromList = (id) => {
+        userMovieListService.removeMovieFromList(id);
+        setUserMovieList();
+        onCloseDelete();
+    }
 
     return movieList ? (
         <div className='App'>
@@ -34,6 +63,11 @@ export const UserMovieList = () => {
                         onClick={() => setSelectedMovie(movie.imdbID)}>
                         View details
                         </Button>
+                        {' '}{deleteMovieFromList && <Button
+                        variant='light'
+                        onClick={() => setDeleteModal(movie.imdbID)}>
+                        Remove from list
+                        </Button>}
                     </div>
                 ))
             }
@@ -45,6 +79,12 @@ export const UserMovieList = () => {
                             <MovieDetails id={selectedMovie} />
                         </div>
                     </Modal>)
+            }
+            {
+                showModal && (
+                    <div>
+                        {confirmDeleteModal(deletedMovie)}
+                    </div>)
             }
             </div>
         </div>

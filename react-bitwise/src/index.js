@@ -6,8 +6,13 @@ import App from './App';
 import { UserMovieList } from './components/UserMovieList';
 import { Navigation } from './components/Navigation';
 import 'bootstrap/dist/css/bootstrap.css';
+// import { Provider } from 'react-redux';
+// import configureStore from './redux/store';
 
 ReactDOM.render(
+  // <Provider store={configureStore()}>
+
+  // </Provider>
   <React.StrictMode>
     <Router>
       <Navigation/>

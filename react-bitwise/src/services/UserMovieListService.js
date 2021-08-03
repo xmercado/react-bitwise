@@ -21,4 +21,12 @@ export default class UserMovieListService {
         if (!movieList) return null;
         return JSON.parse(movieList);
     }
+
+    removeMovieFromList(id) {
+        const movieList = JSON.parse(localStorage.getItem('movieList'));
+        const updatedList = movieList.list.filter((movie) => movie.imdbID !== id);
+
+        movieList.list = updatedList;
+        localStorage.setItem('movieList', JSON.stringify(movieList));
+    }
 }

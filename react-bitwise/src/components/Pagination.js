@@ -1,21 +1,50 @@
-import { useState } from 'react';
-
-export const Pagination = () => {
-    const [currentPage, setCurrentPage] = useState(1);
-
+export const ExtendedPagination = ({pageCount, getMoviesByPage, currentPage}) => {
+    const restrictedValues = [1, 2, pageCount-2, pageCount-1, pageCount];
+    const PaginationButton = ({ page }) => (
+        <button
+            disabled={page === currentPage}
+            onClick={() => getMoviesByPage(page)}
+        >{ `${page}` }</button>
+    );
+    const renderButtonsConditionally = (condition) => (
+        condition
+            ? (
+                <>
+                    <PaginationButton page={currentPage + 1} />
+                    <PaginationButton page={currentPage + 2 } />
+                    <PaginationButton page={currentPage + 3 } />
+                </>
+            )
+            : null
+    )
     return (
         <div>
-            {
-                [...Array(50)].map((emptyArr, index) => {
-                    return (
-                        <button
-                            key={`button-${index + 1}`}
-                            disabled={index + 1 === currentPage}
-                            onClick={() => setCurrentPage(index + 1)}
-                        >{ `${index + 1}` }</button>
-                    );
-                })
-            }
+            <div>
+                <button
+                    onClick={() => getMoviesByPage(currentPage - 1)}
+                    disabled={currentPage  === 1}>
+                    Back
+                </button>
+                <span>Page {currentPage}</span>
+                <button
+                    onClick={() => getMoviesByPage(currentPage + 1)}
+                    disabled={currentPage === pageCount}>
+                    Forward
+                </button>
+            </div>
+            <div>
+                <PaginationButton page={1}/>
+                <PaginationButton page={2}/>
+                <PaginationButton page={3}/>
+                { currentPage > 4 && <span>...</span> }
+                {
+                    renderButtonsConditionally(!restrictedValues.includes(currentPage))
+                }
+                { currentPage !== pageCount-3 && <span>...</span> }
+                <PaginationButton page={pageCount-2}/>
+                <PaginationButton page={pageCount-1}/>
+                <PaginationButton page={pageCount}/>
+            </div>
         </div>
-    )
-}
+    );
+};
