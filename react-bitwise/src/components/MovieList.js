@@ -3,7 +3,7 @@ import { MovieDetails } from "./MovieDetails";
 import MovieService from "../services/MovieService";
 import UserMovieListService from "../services/UserMovieListService";
 import { Search } from "./Search";
-import { Sidebar } from './Sidebar';
+import { ListSort } from './ListSort';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Pagination from 'react-bootstrap/Pagination';
@@ -17,7 +17,7 @@ export const MovieList= (props) => {
     const [selectedMovie, setSelectedMovie] = useState();
     const [searchTitle, setSearchTitle] = useState('');
 
-    const [sortedList, setSortedList] = useState();
+    // const [sortedList, setSortedList] = useState();
 
     const getMoviesByTitle = async (searchTitle) => {
         const movie = await movieService.getMoviesByTitle(searchTitle);
@@ -28,29 +28,29 @@ export const MovieList= (props) => {
     // const sortedArr = myArr.sort((a, b) =>
     // a < b ? -1 : a > b ? 1 : 0);
 
-    const sortByYearRecent = () => {
-        const sortedListRecent = movieList.sort((a, b) => 
-        a.Year < b.Year ? -1 : a.Year > b.Year ? 1 : 0)
-        .reverse();
+    // const sortByYearRecent = () => {
+    //     const sortedListRecent = movieList.sort((a, b) => 
+    //     a.Year < b.Year ? -1 : a.Year > b.Year ? 1 : 0)
+    //     .reverse();
 
-        setMovieList([]);
-        setMovieList(sortedListRecent);
-        console.log('RECENT ', sortedListRecent);
-        console.log('MOVIELIST ', movieList);
-    }
+    //     setMovieList([]);
+    //     setMovieList(sortedListRecent);
+    //     console.log('RECENT ', sortedListRecent);
+    //     console.log('MOVIELIST ', movieList);
+    // }
 
-    const sortByYearOldest = () => {
-        const sortedListOldest = movieList.sort((a, b) => 
-        a.Year < b.Year ? -1 : a.Year > b.Year ? 1 : 0);
+    // const sortByYearOldest = () => {
+    //     const sortedListOldest = movieList.sort((a, b) => 
+    //     a.Year < b.Year ? -1 : a.Year > b.Year ? 1 : 0);
 
-        setMovieList(sortedListOldest);
-        console.log('OLDEST ', sortedListOldest);
-        console.log('MOVIELIST ', movieList);
-    }
+    //     setMovieList(sortedListOldest);
+    //     console.log('OLDEST ', sortedListOldest);
+    //     console.log('MOVIELIST ', movieList);
+    // }
 
-    const showSeriesOnly = () => {
-        setMovieList(movieList.Type = 'series');
-    }
+    // const showSeriesOnly = () => {
+    //     setMovieList(movieList.Type = 'series');
+    // }
 
     useEffect(() => {
         getMoviesByTitle(searchTitle);
@@ -63,10 +63,14 @@ export const MovieList= (props) => {
             <div className='movie-search'>
                 <Search searchTitle={searchTitle} setSearchTitle={setSearchTitle} />
             </div>
+            {!selectedMovie && movieList &&
+                <div>
+                    <ListSort movieList={movieList} setMovieList={setMovieList} />
+            </div>}
             {!selectedMovie && movieList && 
                 <div className='movie-card'>
                     <div>
-                        <Button
+                        {/* <Button
                         variant='primary'
                         onClick={() => sortByYearRecent()}>
                             Sort by recent
@@ -82,7 +86,7 @@ export const MovieList= (props) => {
                         variant='primary'
                         onClick={() => showSeriesOnly()}>
                             Show series only
-                        </Button>
+                        </Button> */}
                     </div>
                     {
                         movieList.map((movie) => (
